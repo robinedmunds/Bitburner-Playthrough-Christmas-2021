@@ -16,19 +16,12 @@ class Market {
     this.exposure = this.#calcTotalExposure()
     this.gain = this.#calcPortfolioGain().gainSum
     this.gainDecimal = this.#calcPortfolioGain().gainDecimal
-    this.history = []
-  }
-
-  #addSaleToHistory(position) {
-    this.history.push(
-      new History(position, companies[position.symbol].bidPrice)
-    )
   }
 
   #buildCompanies() {
     const companies = {}
     for (const symbol of this.symbols) {
-      companies[symbol] = new Company(this.#ns, symbol, this.#addSaleToHistory)
+      companies[symbol] = new Company(this.#ns, symbol)
     }
     return companies
   }

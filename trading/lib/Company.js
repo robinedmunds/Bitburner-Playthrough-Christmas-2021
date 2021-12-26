@@ -8,11 +8,9 @@ const POSITION_TYPES = {
 
 class Company {
   #ns
-  #addSaleToHistory
 
-  constructor(ns, symbol, addSaleToHistory) {
+  constructor(ns, symbol) {
     this.#ns = ns
-    this.#addSaleToHistory = addSaleToHistory
     this.symbol = symbol
     this.price = this.#ns.stock.getPrice(this.symbol)
     this.askPrice = this.#ns.stock.getAskPrice(this.symbol)
@@ -21,7 +19,7 @@ class Company {
     this.volatility = this.#ns.stock.getVolatility(this.symbol)
     this.volume = this.#ns.stock.getMaxShares(this.symbol)
     this.position = this.#ns.stock.getPosition(this.symbol)
-    this.customPosition = this.#buildCustomPosition(this.#addSaleToHistory)
+    this.customPosition = this.#buildCustomPosition()
     this.havePosition = this.#havePosition()
     this.gain = this.#calcGain().gain
     this.gainDecimal = this.#calcGain().gainDecimal
@@ -31,25 +29,15 @@ class Company {
     return !this.position.every((elem) => elem === 0)
   }
 
-  #buildCustomPosition(addSaleToHistory) {
+  #buildCustomPosition() {
     if (!this.#havePosition()) return null
 
     const position = this.position
     if (position[0] + position[1] !== 0) {
-      return new Position(
-        this.#ns,
-        this.symbol,
-        POSITION_TYPES.LONG,
-        addSaleToHistory
-      )
+      return new Position(this.#ns, this.symbol, POSITION_TYPES.LONG)
     }
     if (position[2] + position[3] !== 0) {
-      return new Position(
-        this.#ns,
-        this.symbol,
-        POSITION_TYPES.SHORT,
-        addSaleToHistory
-      )
+      return new Position(this.#ns, this.symbol, POSITION_TYPES.SHORT)
     }
   }
 

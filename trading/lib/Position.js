@@ -7,11 +7,9 @@ const POSITION_TYPES = {
 
 class Position {
   #ns
-  #addSaleToHistory
 
-  constructor(ns, symbol, type, addSaleToHistory) {
+  constructor(ns, symbol, type) {
     this.#ns = ns
-    this.#addSaleToHistory = addSaleToHistory
     this.symbol = symbol
     this.type = this.#parseType(type)
     this.volume = this.#parsePositionArray().volume
@@ -48,7 +46,6 @@ class Position {
 
   async closePosition() {
     this.#ns.print(`INFO: Closed LONG ${this.symbol} position.`)
-    // this.#addSaleToHistory(this)
     return await this.#ns.stock.sell(this.symbol, this.volume)
   }
 }
