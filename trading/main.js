@@ -7,11 +7,13 @@ const POSITION_TYPES = {
 }
 
 const STOP_ORDERS = {
-  LOSS: 0.9725,
-  GAIN: 1.055
+  LOSS: 0.8,
+  GAIN: 1.04
 }
 
-const CASH = 10 ** 12 * 7
+const N = 23
+
+const CASH = 10 ** 12 * 8
 
 const haveMoneyToSpend = (exposure) => exposure < CASH * 0.9
 
@@ -23,7 +25,7 @@ const moneyToSpend = (exposure) => {
 
 const buyShares = async (company, cashPool) => {
   const askPrice = company.askPrice
-  const toSpend = cashPool / 11
+  const toSpend = cashPool / N
   const volume = Math.floor(toSpend / askPrice)
   if (volume < 1) return false
   await company.buy(volume)
@@ -31,9 +33,9 @@ const buyShares = async (company, cashPool) => {
 
 const autoBuyShares = async (ns, market) => {
   const tipped = market.sortCompaniesMostTippedToRise()
-  const topSix = tipped.slice(0, 6)
+  const topN = tipped.slice(0, N)
 
-  for (const company of topSix) {
+  for (const company of topN) {
     if (!haveMoneyToSpend(market.exposure)) return
     await buyShares(company, moneyToSpend(market.exposure))
   }
@@ -54,7 +56,7 @@ const autoSellShares = async (ns, market) => {
     if (gain <= STOP_ORDERS.LOSS) {
       await sellShares(position)
       ns.print(
-        `WARNING:  Stop-loss activated. Selling ${position.volume} ${
+        `WARNING:  Stop-loss activated. Selling ${position.volume.toLocaleString()} ${
           position.symbol
         } shares at \$${position.price.toLocaleString()}.`
       )
@@ -63,7 +65,7 @@ const autoSellShares = async (ns, market) => {
     if (gain >= STOP_ORDERS.GAIN) {
       await sellShares(position)
       ns.print(
-        `WARNING:  Sell-order activated. Selling ${position.volume} ${
+        `WARNING:  Sell-order activated. Selling ${position.volume.toLocaleString()} ${
           position.symbol
         } shares at \$${position.price.toLocaleString()}.`
       )
@@ -92,9 +94,9 @@ const main = async (ns) => {
     await autoSellShares(ns, market)
 
     ns.print(
-      `INFO:  Total gain:  ${market.gain.toLocaleString(
-        "en-GB"
-      )} / ${market.gainDecimal.toFixed(3)}`
+      `INFO:  Exposure: ${(market.exposure / 10 ** 12).toFixed(
+        3
+      )}t -- Gain: ${market.gainDecimal.toFixed(3)}`
     )
   }
 
