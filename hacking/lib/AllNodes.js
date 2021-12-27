@@ -213,6 +213,20 @@ class AllNodes {
     return { nodes, filter: "filterReadyToRoot", count: count }
   }
 
+  filterZeroMoney() {
+    const notMyNodes = this.filterIsNotMine().nodes
+    const nodes = {}
+    let count = 0
+
+    for (const [name, node] of Object.entries(notMyNodes)) {
+      if (node.maxMoney === 0) {
+        nodes[name] = node
+        count++
+      }
+    }
+    return { nodes, filter: "filterZeroMoney", count: count }
+  }
+
   // GET SPECIFIC NODE
 
   getHome() {

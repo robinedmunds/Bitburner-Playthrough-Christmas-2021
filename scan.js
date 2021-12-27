@@ -13,6 +13,7 @@ const main = (ns) => {
   const filterBotnet = allNodesObj.filterBotnet()
   const filterReadyToRoot = allNodesObj.filterReadyToRoot()
   const homeNode = allNodesObj.getHome()
+  const filterZeroMaxMoney = allNodesObj.filterZeroMoney()
 
   const options = [
     "--notmine",
@@ -23,7 +24,8 @@ const main = (ns) => {
     "--botnet",
     "--ready",
     "--home",
-    "--all"
+    "--all",
+    "--zeromoney"
   ]
 
   let output = null
@@ -53,6 +55,8 @@ const main = (ns) => {
     output = filterReadyToRoot
   if (firstArg === options[options.indexOf("--home")]) output = homeNode
   if (firstArg === options[options.indexOf("--all")]) output = all
+  if (firstArg === options[options.indexOf("--zeromoney")])
+    output = filterZeroMaxMoney
 
   if (output) ns.tprint(JSON.stringify(output, null, 2))
 }
