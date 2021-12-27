@@ -1,6 +1,6 @@
 /** @param {NS} ns **/
 
-const MONEY_FLOOR = 10 ** 9 // 1bill
+const MONEY_FLOOR = 10 ** 12 * 11
 
 class Upgrades {
   constructor(ns, id) {
