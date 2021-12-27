@@ -13,7 +13,7 @@ const STOP_ORDERS = {
 
 const N = 23
 
-const CASH = 10 ** 12 * 8
+const CASH = 10 ** 12 * 4
 
 const haveMoneyToSpend = (exposure) => exposure < CASH * 0.9
 
