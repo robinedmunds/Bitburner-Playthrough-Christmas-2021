@@ -1,9 +1,5 @@
 /** @param {NS} ns **/
 import { NodeDetail } from "/scripts/dist/NodeDetail.js"
-import {
-  TARGET_MONEY_RATIO,
-  TARGET_SECURITY_RATIO
-} from "/scripts/dist/constants.js"
 
 const ACTIONS = {
   WEAKEN_SECURITY: "WEAKEN_SECURITY",
@@ -12,51 +8,51 @@ const ACTIONS = {
   DO_NOTHING: "DO_NOTHING"
 }
 
-const PORT = 3
+const PORT = 4
 
 const getAppropriateAction = (nodeDetail) => {
   return nodeDetail.recommendedAction
 }
 
-const isJsonParsable = (json) => {
-  try {
-    JSON.parse(json)
-    return true
-  } catch (err) {
-    return false
-  }
-}
+// const isJsonParsable = (json) => {
+//   try {
+//     JSON.parse(json)
+//     return true
+//   } catch (err) {
+//     return false
+//   }
+// }
 
-const broadcastAction = async (ns, action, prevAction) => {
-  const portData = await ns.readPort(PORT)
-  let json = undefined
+// const broadcastAction = async (ns, action, prevAction) => {
+//   const portData = await ns.readPort(PORT)
+//   let json = undefined
 
-  if (isJsonParsable(portData) === true) {
-    json = JSON.parse(portData)
-  } else {
-    return
-  }
+//   if (isJsonParsable(portData) === true) {
+//     json = JSON.parse(portData)
+//   } else {
+//     return
+//   }
 
-  switch (action) {
-    case ACTIONS.WEAKEN_SECURITY:
-      json.currentlyWeaking++
-    case ACTIONS.GROW_MONEY:
-      json.currentlyGrowing++
-    case ACTIONS.STEAL_MONEY:
-      json.currentlyHacking++
-  }
+//   switch (action) {
+//     case ACTIONS.WEAKEN_SECURITY:
+//       json.currentlyWeaking++
+//     case ACTIONS.GROW_MONEY:
+//       json.currentlyGrowing++
+//     case ACTIONS.STEAL_MONEY:
+//       json.currentlyHacking++
+//   }
 
-  switch (prevAction) {
-    case ACTIONS.WEAKEN_SECURITY:
-      json.currentlyWeaking--
-    case ACTIONS.GROW_MONEY:
-      json.currentlyGrowing--
-    case ACTIONS.STEAL_MONEY:
-      json.currentlyHacking--
-  }
+//   switch (prevAction) {
+//     case ACTIONS.WEAKEN_SECURITY:
+//       json.currentlyWeaking--
+//     case ACTIONS.GROW_MONEY:
+//       json.currentlyGrowing--
+//     case ACTIONS.STEAL_MONEY:
+//       json.currentlyHacking--
+//   }
 
-  await ns.writePort(PORT, JSON.stringify(json))
-}
+//   await ns.writePort(PORT, JSON.stringify(json))
+// }
 
 const performAction = async (ns, action, target) => {
   switch (action) {
@@ -92,7 +88,7 @@ const main = async (ns) => {
   while (true) {
     nodeDetail = await new NodeDetail(ns, target)
     action = getAppropriateAction(nodeDetail)
-    await broadcastAction(ns, action, prevAction)
+    // await broadcastAction(ns, action, prevAction)
     prevAction = action
     if ((await performAction(ns, action, target)) === "BREAK") break
   }
