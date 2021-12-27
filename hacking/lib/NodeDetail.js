@@ -31,6 +31,7 @@ class NodeDetail {
     this.hackTime = this.#ns.getHackTime(target)
     this.growTime = this.#ns.getGrowTime(target)
     this.weakenTime = this.#ns.getWeakenTime(target)
+    this.hackChance = this.#ns.hackAnalyzeChance(target)
     this.childNodes = this.#ns.scan(target)
   }
 
