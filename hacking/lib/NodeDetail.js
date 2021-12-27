@@ -1,5 +1,12 @@
 /** @param {NS} ns **/
 
+const ACTIONS = {
+  WEAKEN_SECURITY: "WEAKEN_SECURITY",
+  GROW_MONEY: "GROW_MONEY",
+  STEAL_MONEY: "STEAL_MONEY",
+  DO_NOTHING: "DO_NOTHING"
+}
+
 class NodeDetail {
   #ns
 
@@ -33,12 +40,22 @@ class NodeDetail {
     this.weakenTime = this.#ns.getWeakenTime(target)
     this.hackChance = this.#ns.hackAnalyzeChance(target)
     this.childNodes = this.#ns.scan(target)
+    this.recommendedAction = this.#recommendedAction()
   }
 
   #isRootable(target) {
     const myHackingLevel = this.#ns.getHackingLevel()
     const nodeLevel = this.#ns.getServerRequiredHackingLevel(target)
     return myHackingLevel >= nodeLevel
+  }
+
+  #recommendedAction() {
+    if (!this.isRooted) return ACTIONS.DO_NOTHING
+    if (this.hackChance > 0.9) return ACTIONS.STEAL_MONEY
+    if (this.money < this.maxMoney * 0.6) return ACTIONS.GROW_MONEY
+    if (this.hackChance * this.hackTime < this.weakenTime)
+      return ACTIONS.WEAKEN_SECURITY
+    return ACTIONS.STEAL_MONEY
   }
 
   #isWorthHacking(target) {

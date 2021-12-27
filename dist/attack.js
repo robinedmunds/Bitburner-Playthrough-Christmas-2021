@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-import { NodeDetail } from "/scripts/dist/classes.js"
+import { NodeDetail } from "/scripts/dist/NodeDetail.js"
 import {
   TARGET_MONEY_RATIO,
   TARGET_SECURITY_RATIO
@@ -14,20 +14,23 @@ const ACTIONS = {
 
 const PORT = 3
 
-const getAppropriateAction = (ns, nodeDetail) => {
-  const port = JSON.parse(ns.readPort(1))
-  const targetSecurityRatio = port.targetSecurityRatio || TARGET_SECURITY_RATIO
-  const targetMoneyRatio = port.targetMoneyRatio || TARGET_MONEY_RATIO
-  ns.print(
-    `targetSecurityRatio:  ${targetSecurityRatio} - targetMoneyRatio:  ${targetMoneyRatio}`
-  )
+// const getAppropriateAction = (ns, nodeDetail) => {
+//   const port = JSON.parse(ns.readPort(1))
+//   const targetSecurityRatio = port.targetSecurityRatio || TARGET_SECURITY_RATIO
+//   const targetMoneyRatio = port.targetMoneyRatio || TARGET_MONEY_RATIO
+//   ns.print(
+//     `targetSecurityRatio:  ${targetSecurityRatio} - targetMoneyRatio:  ${targetMoneyRatio}`
+//   )
 
-  if (!nodeDetail) return null
-  if (!nodeDetail.isRooted) return ACTIONS.DO_NOTHING
-  if (nodeDetail.securityRatio < targetSecurityRatio)
-    return ACTIONS.WEAKEN_SECURITY
-  if (nodeDetail.moneyRatio < targetMoneyRatio) return ACTIONS.GROW_MONEY
-  return ACTIONS.STEAL_MONEY
+//   if (!nodeDetail) return null
+//   if (!nodeDetail.isRooted) return ACTIONS.DO_NOTHING
+//   if (nodeDetail.hackChance < 0.9) return ACTIONS.WEAKEN_SECURITY
+//   if (nodeDetail.moneyRatio < targetMoneyRatio) return ACTIONS.GROW_MONEY
+//   return ACTIONS.STEAL_MONEY
+// }
+
+const getAppropriateAction = (nodeDetail) => {
+  return nodeDetail.recommendedAction
 }
 
 const isJsonParsable = (json) => {
@@ -103,7 +106,7 @@ const main = async (ns) => {
 
   while (true) {
     nodeDetail = await new NodeDetail(ns, target)
-    action = getAppropriateAction(ns, nodeDetail)
+    action = getAppropriateAction(nodeDetail)
     await broadcastAction(ns, action, prevAction)
     prevAction = action
     if ((await performAction(ns, action, target)) === "BREAK") break
