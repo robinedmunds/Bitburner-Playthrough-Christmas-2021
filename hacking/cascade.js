@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-import { AllNodes } from "/scripts/lib/classes.js"
+import { AllNodes } from "/scripts/hacking/lib/AllNodes.js"
 
 const ATTACK_SCRIPT = "/scripts/dist/attack.js"
 const RAM_UTILISATION_TARGET = 0.9

@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-import { NodeDetail } from "/scripts/lib/classes.js"
+import { NodeDetail } from "/scripts/hacking/lib/NodeDetail.js"
 
 const main = async (ns) => {
   const target = ns.args[0]

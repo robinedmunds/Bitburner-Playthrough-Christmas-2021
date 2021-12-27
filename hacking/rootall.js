@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-import { AllNodes } from "/scripts/lib/classes.js"
+import { AllNodes } from "/scripts/hacking/lib/AllNodes.js"
 
 const fileExistsOnHome = (ns, filename) => ns.fileExists(filename, "home")
 

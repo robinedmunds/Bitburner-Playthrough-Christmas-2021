@@ -1,6 +1,5 @@
 /** @param {NS} ns **/
-
-import { AllNodes } from "/scripts/lib/classes.js"
+import { AllNodes } from "/scripts/hacking/lib/AllNodes.js"
 
 const main = (ns) => {
   const firstArg = ns.args[0]
