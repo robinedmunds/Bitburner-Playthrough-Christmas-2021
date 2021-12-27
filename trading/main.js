@@ -93,10 +93,14 @@ const main = async (ns) => {
     await autoBuyShares(ns, market)
     await autoSellShares(ns, market)
 
+    const currentBidValue = market.exposure * market.gainDecimal
     ns.print(
       `INFO:  Exposure: ${(market.exposure / 10 ** 12).toFixed(
         3
-      )}t -- Gain: ${market.gainDecimal.toFixed(3)}`
+      )}t -- Gain: \$${market.gainDecimal.toFixed(3)} -- Value: \$${(
+        currentBidValue /
+        10 ** 12
+      ).toFixed(3)}t`
     )
   }
 
