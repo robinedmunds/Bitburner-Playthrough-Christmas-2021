@@ -8,7 +8,7 @@ const aliases = {
   buyhacknet: "/scripts/buy/hacknet.js",
   cascade: "/scripts/hacking/cascade.js",
   rootall: "/scripts/hacking/rootall.js",
-  killall: "/scripts/hacking/killall.js"
+  remotekill: "/scripts/hacking/killall.js"
 }
 
 const main = (ns) => {
