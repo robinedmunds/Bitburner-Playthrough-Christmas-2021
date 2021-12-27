@@ -27,6 +27,10 @@ class NodeDetail {
     this.maxRAM = this.#ns.getServerMaxRam(target)
     this.usedRAM = this.#ns.getServerUsedRam(target)
     this.availableRam = this.#calcAvailableRam(target)
+    this.growthMultiplier = this.#ns.getServerGrowth(target)
+    this.hackTime = this.#ns.getHackTime(target)
+    this.growTime = this.#ns.getGrowTime(target)
+    this.weakenTime = this.#ns.getWeakenTime(target)
     this.childNodes = this.#ns.scan(target)
   }
 
