@@ -63,11 +63,17 @@ class Company {
   // PUBLIC METHODS
 
   async buy(volume) {
-    const maxVolume = this.#ns.stock.getMaxShares(this.symbol)
-    if (volume < maxVolume) {
-      return await this.#ns.stock.buy(this.symbol, volume)
+    const companyVolume = this.ns.stock.getMaxShares(this.symbol)
+    let buyableVolume
+    if (this.havePosition === true) {
+      buyableVolume = companyVolume - this.customPosition.volume
+    } else {
+      buyableVolume = companyVolume
     }
-    return await this.#ns.stock.buy(this.symbol, maxVolume)
+    if (volume < buyableVolume) {
+      return await this.ns.stock.buy(this.symbol, volume)
+    }
+    return await this.ns.stock.buy(this.symbol, buyableVolume)
   }
 }
 
