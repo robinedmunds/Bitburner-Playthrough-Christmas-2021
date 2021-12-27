@@ -6,7 +6,7 @@ const RAM_UTILISATION_TARGET = 0.9
 
 const cpFilesToAttackers = async (ns, attackers) => {
   const files = [
-    "/scripts/dist/classes.js",
+    "/scripts/dist/NodeDetail.js",
     "/scripts/dist/constants.js",
     "/scripts/dist/attack.js"
   ]
