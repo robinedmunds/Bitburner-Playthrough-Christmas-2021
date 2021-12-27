@@ -11,7 +11,7 @@ const STOP_ORDERS = {
   GAIN: 1.055
 }
 
-const CASH = 10 ** 9 * 1000
+const CASH = 10 ** 12 * 7
 
 const haveMoneyToSpend = (exposure) => exposure < CASH * 0.9
 
