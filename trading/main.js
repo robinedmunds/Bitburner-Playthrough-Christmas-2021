@@ -25,7 +25,7 @@ const moneyToSpend = (exposure) => {
 
 const buyShares = async (company, cashPool) => {
   const askPrice = company.askPrice
-  const toSpend = cashPool / N
+  const toSpend = cashPool * 0.9
   const volume = Math.floor(toSpend / askPrice)
   if (volume < 1) return false
   await company.buy(volume)
