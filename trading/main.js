@@ -96,11 +96,11 @@ const main = async (ns) => {
 
   // STRATEGY
   // set aside amount of cash for trading
-  // find top 11 most likely to rise
-  // find 6 least volatile
+  // find top X most likely to rise
+  // find X least volatile
   // invest cash
-  // 6pc stop loss
-  // 12pc gain stop order
+  // Xpc stop loss
+  // Xpc gain stop order
 
   let market = undefined
 
@@ -123,31 +123,6 @@ const main = async (ns) => {
       ).toFixed(3)}t`
     )
   }
-
-  // const funcs = {
-  // 	purchase4SMarketData: ns.stock.purchase4SMarketData,
-  // 	purchase4SMarketDataTixApi: ns.stock.purchase4SMarketDataTixApi,
-  // 	buy: ns.stock.buy,
-
-  // 	getOrders: ns.stock.getOrders,
-  // 	cancelOrder: ns.stock.cancelOrder(),
-  // 	getSymbols: ns.stock.getSymbols,
-  // 	placeOrder: ns.stock.placeOrder,
-  // 	getPurchaseCost: ns.stock.getPurchaseCost(),
-  // 	sell: ns.stock.sell,
-  // 	sellShort: ns.stock.sellShort,
-  // 	short: ns.stock.short,
-
-  // 	getPrice: ns.stock.getPrice(),
-  // 	getAskPrice: ns.stock.getAskPrice,
-  // 	getBidPrice: ns.stock.getBidPrice,
-  // 	getForecast: ns.stock.getForecast,
-  // 	getMaxShares: ns.stock.getMaxShares,
-  // 	getPosition: ns.stock.getPosition(),
-  // 	getVolatility: ns.stock.getVolatility,
-  // 	getSaleGain: ns.stock.getSaleGain,
-
-  // }
 }
 
 export { main }
