@@ -19,6 +19,13 @@ class Market {
     this.history = []
   }
 
+  refresh() {
+    this.companies = this.buildCompanies()
+    this.exposure = this.calcTotalExposure()
+    this.gain = this.calcPortfolioGain().gainSum
+    this.gainDecimal = this.calcPortfolioGain().gainDecimal
+  }
+
   getNs() {
     return this.#ns
   }

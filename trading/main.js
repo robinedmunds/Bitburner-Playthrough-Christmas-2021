@@ -102,13 +102,17 @@ const main = async (ns) => {
   // Xpc stop loss
   // Xpc gain stop order
 
-  let market = undefined
+  const market = new Market(ns)
+  let profit = 0
 
   await startServers(ns)
 
   while (true) {
     await ns.sleep(1000 * 3)
-    market = new Market(ns)
+    market.refresh()
+
+    if (market.history.length > 1)
+      profit += market.history.reduce((prev, curr) => prev.profit + curr.profit)
 
     await autoBuyShares(ns, market)
     await autoSellShares(ns, market)
@@ -120,7 +124,7 @@ const main = async (ns) => {
       )}t -- Gain: ${market.gainDecimal.toFixed(3)} -- Value: \$${(
         currentBidValue /
         10 ** 12
-      ).toFixed(3)}t`
+      ).toFixed(3)}t -- Session profit: \$${profit.toLocaleString("en-GB")}`
     )
   }
 }
