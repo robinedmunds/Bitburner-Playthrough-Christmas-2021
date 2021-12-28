@@ -1,24 +1,6 @@
 /** @param {NS} ns **/
 import { AllNodes } from "/scripts/hacking/lib/AllNodes.js"
 
-// const findRoute = (ns, target, relationships) => {
-// 	const parentChilds = relationships
-// 	const route = [target]
-// 	// target > parent > grand parent > ...
-
-// 	const findParent = (child) => {
-// 		// recursive
-// 		const relationship = parentChilds.filter(e => e[1] === child)
-// 		const parent = relationship[0][0]
-// 		route.push(parent)
-// 		if (parent !== "home") findParent(parent)
-// 	}
-
-// 	findParent(target)
-
-// 	return route.reverse()
-// }
-
 const main = (ns) => {
   const arg = ns.args[0] || "run4theh111z"
   const allNodesObj = new AllNodes(ns, "home")
