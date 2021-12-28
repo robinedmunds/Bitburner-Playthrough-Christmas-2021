@@ -1,7 +1,5 @@
 /** @param {NS} ns **/
 
-const MONEY_FLOOR = 10 ** 12 * 11
-
 class Upgrades {
   constructor(ns, id) {
     this.level = { type: "level", cost: ns.hacknet.getLevelUpgradeCost(id) }
@@ -29,8 +27,8 @@ class Node {
   }
 }
 
-const buildNodesArray = async (ns) => {
-  const nodeCount = await ns.hacknet.numNodes()
+const buildNodesArray = (ns) => {
+  const nodeCount = ns.hacknet.numNodes()
   const nodes = []
   for (let id = 0; id < nodeCount; id++) {
     nodes.push(new Node(ns, id))
@@ -38,7 +36,7 @@ const buildNodesArray = async (ns) => {
   return nodes
 }
 
-const findCheapestUpgrade = async (ns, nodes) => {
+const findCheapestUpgrade = (ns, nodes) => {
   const sorted = nodes.sort((a, b) => {
     const upgradeCostA = a.upgrades.cheapest.cost
     const upgradeCostB = b.upgrades.cheapest.cost
@@ -49,7 +47,7 @@ const findCheapestUpgrade = async (ns, nodes) => {
   return sorted[0]
 }
 
-const makePurchase = async (ns, cheapestUpgrade, newNodeCost) => {
+const makePurchase = (ns, cheapestUpgrade, newNodeCost) => {
   const purchaseFuncs = {
     level: ns.hacknet.upgradeLevel,
     ram: ns.hacknet.upgradeRam,
@@ -62,34 +60,34 @@ const makePurchase = async (ns, cheapestUpgrade, newNodeCost) => {
     const upgradeType = cheapestUpgrade.upgrades.cheapest.type
     const nodeId = cheapestUpgrade.id
     ns.tprint(`*** upgrading ${upgradeType} on nodeId: ${nodeId} ***`)
-    return await purchaseFuncs[upgradeType](nodeId)
+    return purchaseFuncs[upgradeType](nodeId)
   }
 
   ns.tprint(`*** purchasing new node ***`)
-  return await purchaseFuncs["newNode"]()
-}
-
-const getMoneyToSpend = async (ns) => {
-  return (await ns.getServerMoneyAvailable("home")) - MONEY_FLOOR
+  return purchaseFuncs["newNode"]()
 }
 
 const getUpgradeCost = (obj) => obj.upgrades.cheapest.cost
 
-const main = async (ns) => {
-  let moneyToSpend = await getMoneyToSpend(ns)
-  let nodes = await buildNodesArray(ns)
-  let cheapestUpgrade = await findCheapestUpgrade(ns, nodes)
+const main = (ns) => {
+  const moneyToSpend = ns.args[0]
+
+  if (typeof moneyToSpend !== "number") {
+    ns.tprint("ERROR:  Requires amount to spend as first argument.")
+    return
+  }
+  let nodes = buildNodesArray(ns)
+  let cheapestUpgrade = findCheapestUpgrade(ns, nodes)
   let cheapestUpgradeCost = getUpgradeCost(cheapestUpgrade)
-  let newNodeCost = await ns.hacknet.getPurchaseNodeCost()
+  let newNodeCost = ns.hacknet.getPurchaseNodeCost()
 
   while (moneyToSpend > Math.min(cheapestUpgradeCost, newNodeCost)) {
-    await makePurchase(ns, cheapestUpgrade, newNodeCost)
+    makePurchase(ns, cheapestUpgrade, newNodeCost)
 
-    moneyToSpend = await getMoneyToSpend(ns)
-    nodes = await buildNodesArray(ns)
-    cheapestUpgrade = await findCheapestUpgrade(ns, nodes)
+    nodes = buildNodesArray(ns)
+    cheapestUpgrade = findCheapestUpgrade(ns, nodes)
     cheapestUpgradeCost = getUpgradeCost(cheapestUpgrade)
-    newNodeCost = await ns.hacknet.getPurchaseNodeCost()
+    newNodeCost = ns.hacknet.getPurchaseNodeCost()
   }
 }
 
