@@ -5,11 +5,7 @@ const ATTACK_SCRIPT = "/scripts/dist/attack.js"
 const RAM_UTILISATION_TARGET = 0.9
 
 const cpFilesToAttackers = async (ns, attackers) => {
-  const files = [
-    "/scripts/dist/NodeDetail.js",
-    "/scripts/dist/constants.js",
-    "/scripts/dist/attack.js"
-  ]
+  const files = ["/scripts/dist/NodeDetail.js", "/scripts/dist/attack.js"]
 
   for (const nodeName of Object.keys(attackers)) {
     for (const file of files) {
@@ -97,7 +93,7 @@ const launchAttack = (ns, attackers, victims, attackerOrder, victimOrder) => {
 }
 
 const startServers = async (ns) => {
-  const servers = ["/scripts/ports/server.js", "/scripts/ports/statsServer.js"]
+  const servers = ["/scripts/api/portFour.js"]
 
   for (const server of servers) {
     await ns.exec(server, "home")
@@ -112,7 +108,7 @@ const main = async (ns) => {
   const victims = allNodesObj.filterIsWorthHacking().nodes
   const attackers = { ...myServers, ...homeNode, ...botnet }
 
-  await startServers(ns)
+  // await startServers(ns)
 
   await cpFilesToAttackers(ns, attackers)
 

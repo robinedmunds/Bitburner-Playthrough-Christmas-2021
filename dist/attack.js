@@ -83,6 +83,7 @@ const main = async (ns) => {
 
   if (!ns.serverExists(target)) {
     ns.tprint(`${target} is unreachable. Exiting...`)
+    return
   }
 
   while (true) {
