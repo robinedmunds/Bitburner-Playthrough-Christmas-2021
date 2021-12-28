@@ -115,9 +115,9 @@ const main = async (ns) => {
 
     const currentBidValue = market.exposure * market.gainDecimal
     ns.print(
-      `INFO:  Exposure: ${(market.exposure / 10 ** 12).toFixed(
+      `INFO:  Exposure: \$${(market.exposure / 10 ** 12).toFixed(
         3
-      )}t -- Gain: \$${market.gainDecimal.toFixed(3)} -- Value: \$${(
+      )}t -- Gain: ${market.gainDecimal.toFixed(3)} -- Value: \$${(
         currentBidValue /
         10 ** 12
       ).toFixed(3)}t`
