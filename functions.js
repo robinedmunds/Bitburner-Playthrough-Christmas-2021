@@ -1,4 +1,4 @@
-[
+const ns = [
   "alert",
   "alterReality",
   "applyToCompany",
@@ -159,4 +159,50 @@
   "workForFaction",
   "write",
   "writePort"
+]
+
+const stock = [
+  "buy",
+  "cancelOrder",
+  "getAskPrice",
+  "getBidPrice",
+  "getForecast",
+  "getMaxShares",
+  "getOrders",
+  "getPosition",
+  "getPrice",
+  "getPurchaseCost",
+  "getSaleGain",
+  "getSymbols",
+  "getVolatility",
+  "placeOrder",
+  "purchase4SMarketData",
+  "purchase4SMarketDataTixApi",
+  "sell",
+  "sellShort",
+  "short"
+]
+
+const hacknet = [
+  "getCacheUpgradeCost",
+  "getCoreUpgradeCost",
+  "getHashUpgradeLevel",
+  "getHashUpgrades",
+  "getLevelUpgradeCost",
+  "getNodeStats",
+  "getPurchaseNodeCost",
+  "getRamUpgradeCost",
+  "getStudyMult",
+  "getTrainingMult",
+  "hashCapacity",
+  "hashCost",
+  "maxNumNodes",
+  "numHashes",
+  "numNodes",
+  "purchaseNode",
+  "spendHashes",
+  "upgradeCache",
+  "upgradeCore",
+  "upgradeLevel",
+  "upgradeRam"
 ]
