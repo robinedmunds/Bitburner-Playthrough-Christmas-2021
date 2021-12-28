@@ -55,6 +55,10 @@ const getAppropriateAction = (nodeDetail) => {
 // }
 
 const performAction = async (ns, action, target) => {
+  const startTime = new Date()
+  const timeString = `INFO:  Action started at:  ${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getHours()}:${startTime.getSeconds()}`
+  ns.print(timeString)
+
   switch (action) {
     case ACTIONS.WEAKEN_SECURITY:
       await ns.weaken(target)
