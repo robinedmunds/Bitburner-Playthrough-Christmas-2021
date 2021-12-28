@@ -35,6 +35,7 @@ const PHONETIC = [
 
 const MAX_SERVERS = 25
 const HOSTNAME_PREFIX = "slave-"
+const PORT = 4
 
 const calcRamOfAffordableServer = (ns, moneyToSpend) => {
   if (typeof moneyToSpend !== "number") return null
@@ -123,9 +124,11 @@ const main = (ns) => {
 
   let moneyFloor = undefined
   try {
-    moneyFloor = JSON.parse(ns.readPort(1)).moneyFloor
-  } catch (err) {}
-  const moneyToSpend = allNodesObj.getHome().home.money - moneyFloor || 10 ** 6
+    moneyFloor = JSON.parse(ns.readPort(PORT)).moneyFloor
+  } catch (err) {
+    moneyFloor = 10 ** 6
+  }
+  const moneyToSpend = allNodesObj.getHome().home.money - moneyFloor
 
   const { ram, cost } = calcRamOfAffordableServer(ns, moneyToSpend)
   const costInMillions = cost / 10 ** 6

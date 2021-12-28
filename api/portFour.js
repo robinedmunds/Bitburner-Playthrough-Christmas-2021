@@ -1,6 +1,7 @@
 /** @param {NS} ns **/
 
 const CONSTANTS = {
+  moneyFloor: 0,
   growTarget: 0.6,
   tradingCashPool: 10 ** 9,
   hacknetCashPool: 10 ** 9
