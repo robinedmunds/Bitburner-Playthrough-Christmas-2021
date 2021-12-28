@@ -16,6 +16,7 @@ class Market {
     this.exposure = this.calcTotalExposure()
     this.gain = this.calcPortfolioGain().gainSum
     this.gainDecimal = this.calcPortfolioGain().gainDecimal
+    this.history = []
   }
 
   getNs() {
@@ -82,6 +83,10 @@ class Market {
       }
     }
     return withPosition
+  }
+
+  pushToHistory(history) {
+    this.history.push(history)
   }
 }
 

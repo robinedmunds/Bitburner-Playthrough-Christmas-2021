@@ -6,9 +6,7 @@ const POSITION_TYPES = {
 }
 
 class History {
-  #ns
-
-  constructor(ns, positionClosed, sellPrice) {
+  constructor(positionClosed, sellPrice) {
     this.positionClosed = positionClosed
     this.volume = positionClosed.volume
     this.buyPrice = positionClosed.price

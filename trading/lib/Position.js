@@ -1,4 +1,5 @@
 /** @param {NS} ns **/
+import { History } from "/scripts/trading/lib/History.js"
 
 const POSITION_TYPES = {
   LONG: "LONG",
@@ -6,11 +7,10 @@ const POSITION_TYPES = {
 }
 
 class Position {
-  #parent
   #ns
 
   constructor(parent, symbol, type) {
-    this.#parent = parent
+    this._parent = parent
     this.#ns = parent.getNs()
     this.symbol = symbol
     this.type = this.#parseType(type)
@@ -48,6 +48,7 @@ class Position {
 
   async closePosition() {
     this.#ns.print(`INFO: Closed LONG ${this.symbol} position.`)
+    this._parent._parent.pushToHistory(new History(this, this._parent.bidPrice))
     return await this.#ns.stock.sell(this.symbol, this.volume)
   }
 }

@@ -7,11 +7,10 @@ const POSITION_TYPES = {
 }
 
 class Company {
-  #parent
   #ns
 
   constructor(parent, symbol) {
-    this.#parent = parent
+    this._parent = parent
     this.#ns = parent.getNs()
     this.symbol = symbol
     this.price = this.#ns.stock.getPrice(this.symbol)
