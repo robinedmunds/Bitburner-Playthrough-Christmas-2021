@@ -13,12 +13,22 @@ const STOP_ORDERS = {
 
 const N = 23
 
-const CASH = 10 ** 12 * 4
+const PORT = 4
+const getCash = (ns) => {
+  let parsed = null
+  try {
+    parsed = JSON.parse(ns.readPort(PORT))
+  } catch (err) {
+    parsed = { tradingCashPool: 0 }
+  }
 
-const haveMoneyToSpend = (exposure) => exposure < CASH * 0.9
+  return parsed.tradingCashPool
+}
 
-const moneyToSpend = (exposure) => {
-  const toSpend = CASH - exposure
+const haveMoneyToSpend = (ns, exposure) => exposure < getCash(ns) * 0.9
+
+const moneyToSpend = (ns, exposure) => {
+  const toSpend = getCash(ns) - exposure
   if (toSpend < 0) return 0
   return toSpend
 }
@@ -36,8 +46,8 @@ const autoBuyShares = async (ns, market) => {
   const topN = tipped.slice(0, N)
 
   for (const company of topN) {
-    if (!haveMoneyToSpend(market.exposure)) return
-    await buyShares(company, moneyToSpend(market.exposure))
+    if (!haveMoneyToSpend(ns, market.exposure)) return
+    await buyShares(company, moneyToSpend(ns, market.exposure))
   }
 }
 
