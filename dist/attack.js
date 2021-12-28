@@ -56,7 +56,7 @@ const getAppropriateAction = (nodeDetail) => {
 
 const performAction = async (ns, action, target) => {
   const startTime = new Date()
-  const timeString = `INFO:  Action started at:  ${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getHours()}:${startTime.getSeconds()}`
+  const timeString = `INFO:  Action started at:  ${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getSeconds()}`
   ns.print(timeString)
 
   switch (action) {
