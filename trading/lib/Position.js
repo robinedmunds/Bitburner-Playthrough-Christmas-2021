@@ -6,10 +6,12 @@ const POSITION_TYPES = {
 }
 
 class Position {
+  #parent
   #ns
 
-  constructor(ns, symbol, type) {
-    this.#ns = ns
+  constructor(parent, symbol, type) {
+    this.#parent = parent
+    this.#ns = parent.getNs()
     this.symbol = symbol
     this.type = this.#parseType(type)
     this.volume = this.#parsePositionArray().volume

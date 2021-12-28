@@ -7,10 +7,12 @@ const POSITION_TYPES = {
 }
 
 class Company {
+  #parent
   #ns
 
-  constructor(ns, symbol) {
-    this.#ns = ns
+  constructor(parent, symbol) {
+    this.#parent = parent
+    this.#ns = parent.getNs()
     this.symbol = symbol
     this.price = this.#ns.stock.getPrice(this.symbol)
     this.askPrice = this.#ns.stock.getAskPrice(this.symbol)
@@ -25,6 +27,10 @@ class Company {
     this.gainDecimal = this.#calcGain().gainDecimal
   }
 
+  getNs() {
+    return this.#ns
+  }
+
   #havePosition() {
     return !this.position.every((elem) => elem === 0)
   }
@@ -34,10 +40,10 @@ class Company {
 
     const position = this.position
     if (position[0] + position[1] !== 0) {
-      return new Position(this.#ns, this.symbol, POSITION_TYPES.LONG)
+      return new Position(this, this.symbol, POSITION_TYPES.LONG)
     }
     if (position[2] + position[3] !== 0) {
-      return new Position(this.#ns, this.symbol, POSITION_TYPES.SHORT)
+      return new Position(this, this.symbol, POSITION_TYPES.SHORT)
     }
   }
 

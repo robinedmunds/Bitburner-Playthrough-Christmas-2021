@@ -12,21 +12,25 @@ class Market {
   constructor(ns) {
     this.#ns = ns
     this.symbols = this.#ns.stock.getSymbols()
-    this.companies = this.#buildCompanies(this.symbols)
-    this.exposure = this.#calcTotalExposure()
-    this.gain = this.#calcPortfolioGain().gainSum
-    this.gainDecimal = this.#calcPortfolioGain().gainDecimal
+    this.companies = this.buildCompanies(this.symbols)
+    this.exposure = this.calcTotalExposure()
+    this.gain = this.calcPortfolioGain().gainSum
+    this.gainDecimal = this.calcPortfolioGain().gainDecimal
   }
 
-  #buildCompanies() {
+  getNs() {
+    return this.#ns
+  }
+
+  buildCompanies() {
     const companies = {}
     for (const symbol of this.symbols) {
-      companies[symbol] = new Company(this.#ns, symbol)
+      companies[symbol] = new Company(this, symbol)
     }
     return companies
   }
 
-  #calcTotalExposure() {
+  calcTotalExposure() {
     let totalExposure = 0
     for (const [sym, company] of Object.entries(this.companies)) {
       if (company.havePosition === false) continue
@@ -35,7 +39,7 @@ class Market {
     return totalExposure
   }
 
-  #calcPortfolioGain() {
+  calcPortfolioGain() {
     let count = 0
     let gainSum = null
     let gainDecimal = null
