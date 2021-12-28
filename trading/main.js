@@ -25,6 +25,14 @@ const getCash = (ns) => {
   return parsed.tradingCashPool
 }
 
+const startServers = async (ns) => {
+  const servers = ["/scripts/api/portFour.js"]
+
+  for (const server of servers) {
+    if (!ns.isRunning(server, "home")) await ns.exec(server, "home")
+  }
+}
+
 const haveMoneyToSpend = (ns, exposure) => exposure < getCash(ns) * 0.9
 
 const moneyToSpend = (ns, exposure) => {
@@ -95,6 +103,8 @@ const main = async (ns) => {
   // 12pc gain stop order
 
   let market = undefined
+
+  await startServers(ns)
 
   while (true) {
     await ns.sleep(1000 * 3)
