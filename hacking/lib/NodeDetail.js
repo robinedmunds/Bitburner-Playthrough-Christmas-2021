@@ -51,7 +51,7 @@ class NodeDetail {
 
   #recommendedAction() {
     if (!this.isRooted) return ACTIONS.DO_NOTHING
-    if (this.hackChance < 0.6) return ACTIONS.WEAKEN_SECURITY
+    if (this.hackChance < this.securityRatio) return ACTIONS.WEAKEN_SECURITY
     if (this.money < this.maxMoney * 0.6) return ACTIONS.GROW_MONEY
     return ACTIONS.STEAL_MONEY
   }
