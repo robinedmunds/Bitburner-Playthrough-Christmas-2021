@@ -16,12 +16,13 @@ const main = async (ns) => {
   const victim = ns.args[0]
   const attackType = ns.args[1]
   const startTime = new Date()
+  const timeString = [
+    pad(startTime.getHours()),
+    pad(startTime.getMinutes()),
+    pad(startTime.getSeconds())
+  ].join(":")
 
-  ns.print(
-    `INFO:  Started at ${pad(startTime.getHours())}:${pad(
-      startTime.getMinutes()
-    )}:${pad(startTime.getSeconds())}`
-  )
+  ns.print(`INFO:  Started at ${timeString}`)
 
   switch (attackType) {
     case ACTIONS.WEAKEN_SECURITY:
