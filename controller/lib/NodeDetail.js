@@ -26,7 +26,7 @@ class NodeDetail {
     this.isRootable = this.#isRootable()
     this.securityLevel = this.#ns.getServerSecurityLevel(target)
     this.minSecurityLevel = this.#ns.getServerMinSecurityLevel(target)
-    this.securityRatio = this.#calcSecurityRatio(target)
+    this.securityStrength = this.#calcSecurityStrength(target)
     this.money = this.#ns.getServerMoneyAvailable(target)
     this.maxMoney = this.#ns.getServerMaxMoney(target)
     this.moneyRatio = this.#calcMoneyRatio()
@@ -44,6 +44,12 @@ class NodeDetail {
     this.recommendedAction = this.#recommendedAction()
   }
 
+  #calcSecurityStrength() {
+    const weakness = this.minSecurityLevel / this.securityLevel
+    const strength = 1.0 - weakness
+    return strength
+  }
+
   #isRootable() {
     const myHackingLevel = this.#ns.getHackingLevel()
     return myHackingLevel >= this.hackingLevel
@@ -51,7 +57,7 @@ class NodeDetail {
 
   #recommendedAction() {
     if (!this.isRooted) return ACTIONS.DO_NOTHING
-    if (this.hackChance < this.securityRatio) return ACTIONS.WEAKEN_SECURITY
+    if (this.securityStrength > this.hackChance) return ACTIONS.WEAKEN_SECURITY
     if (this.money < this.maxMoney * TARGET_MONEY_RATIO)
       return ACTIONS.GROW_MONEY
     return ACTIONS.STEAL_MONEY
@@ -72,11 +78,6 @@ class NodeDetail {
   #calcRamUtilisation() {
     if (this.maxRAM === 0) return 1
     return this.usedRAM / this.maxRAM
-  }
-
-  #calcSecurityRatio() {
-    if (this.securityLevel <= 0) return 1
-    return this.minSecurityLevel / this.securityLevel
   }
 
   #isServerBelongingToMe() {
