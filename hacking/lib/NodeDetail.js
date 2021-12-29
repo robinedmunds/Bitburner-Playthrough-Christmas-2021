@@ -7,6 +7,8 @@ const ACTIONS = {
   DO_NOTHING: "DO_NOTHING"
 }
 
+const TARGET_MONEY_RATIO = 0.1
+
 class NodeDetail {
   #ns
 
@@ -21,81 +23,65 @@ class NodeDetail {
     this.isServerBelongingToMe = this.#isServerBelongingToMe(target)
     this.hackingLevel = this.#ns.getServerRequiredHackingLevel(target)
     this.isRooted = this.#ns.hasRootAccess(target)
-    this.isRootable = this.#isRootable(target)
-    this.isWorthHacking = this.#isWorthHacking(target)
-    this.securityRatio = this.#calcSecurityRatio(target)
+    this.isRootable = this.#isRootable()
     this.securityLevel = this.#ns.getServerSecurityLevel(target)
     this.minSecurityLevel = this.#ns.getServerMinSecurityLevel(target)
-    this.moneyRatio = this.#calcMoneyRatio(target)
+    this.securityRatio = this.#calcSecurityRatio(target)
     this.money = this.#ns.getServerMoneyAvailable(target)
     this.maxMoney = this.#ns.getServerMaxMoney(target)
+    this.moneyRatio = this.#calcMoneyRatio()
+    this.isWorthHacking = this.#isWorthHacking()
     this.openPortsRequired = this.#ns.getServerNumPortsRequired(target)
-    this.ramUtilisation = this.#calcRamUtilisation(target)
     this.maxRAM = this.#ns.getServerMaxRam(target)
     this.usedRAM = this.#ns.getServerUsedRam(target)
-    this.availableRam = this.#calcAvailableRam(target)
+    this.availableRam = this.maxRAM - this.usedRAM
+    this.ramUtilisation = this.#calcRamUtilisation()
     this.growthMultiplier = this.#ns.getServerGrowth(target)
     this.hackTime = this.#ns.getHackTime(target)
     this.growTime = this.#ns.getGrowTime(target)
     this.weakenTime = this.#ns.getWeakenTime(target)
     this.hackChance = this.#ns.hackAnalyzeChance(target)
-    this.childNodes = this.#ns.scan(target)
     this.recommendedAction = this.#recommendedAction()
   }
 
-  #isRootable(target) {
+  #isRootable() {
     const myHackingLevel = this.#ns.getHackingLevel()
-    const nodeLevel = this.#ns.getServerRequiredHackingLevel(target)
-    return myHackingLevel >= nodeLevel
+    return myHackingLevel >= this.hackingLevel
   }
 
   #recommendedAction() {
     if (!this.isRooted) return ACTIONS.DO_NOTHING
     if (this.hackChance < this.securityRatio) return ACTIONS.WEAKEN_SECURITY
-    if (this.money < this.maxMoney * 0.6) return ACTIONS.GROW_MONEY
+    if (this.money < this.maxMoney * TARGET_MONEY_RATIO)
+      return ACTIONS.GROW_MONEY
     return ACTIONS.STEAL_MONEY
   }
 
-  #isWorthHacking(target) {
-    const maxMoney = this.#ns.getServerMaxMoney(target)
+  #isWorthHacking() {
     const tenMillion = 10 ** 7
-
-    if (maxMoney < tenMillion) return false
+    if (this.maxMoney < tenMillion) return false
     return true
   }
 
-  #calcMoneyRatio(target) {
-    const currentMoney = this.#ns.getServerMoneyAvailable(target)
-    const maxMoney = this.#ns.getServerMaxMoney(target)
-
-    if (currentMoney === 0) return 0
-    if (maxMoney === 0) return 0
-    return currentMoney / maxMoney
+  #calcMoneyRatio() {
+    if (this.money <= 0) return 0
+    if (this.maxMoney <= 0) return 0
+    return this.money / this.maxMoney
   }
 
-  #calcRamUtilisation(target) {
-    const usedRam = this.#ns.getServerUsedRam(target)
-    const maxRam = this.#ns.getServerMaxRam(target)
-
-    if (maxRam === 0) return 1
-    return usedRam / maxRam
+  #calcRamUtilisation() {
+    if (this.maxRAM === 0) return 1
+    return this.usedRAM / this.maxRAM
   }
 
-  #calcAvailableRam(target) {
-    return this.#ns.getServerMaxRam(target) - this.#ns.getServerUsedRam(target)
+  #calcSecurityRatio() {
+    if (this.securityLevel <= 0) return 1
+    return this.minSecurityLevel / this.securityLevel
   }
 
-  #calcSecurityRatio(target) {
-    const minLevel = this.#ns.getServerMinSecurityLevel(target)
-    const currentLevel = this.#ns.getServerSecurityLevel(target)
-
-    if (currentLevel === 0) return 1
-    return minLevel / currentLevel
-  }
-
-  #isServerBelongingToMe(target) {
-    const myMachineNames = this.#ns.getPurchasedServers()
-    return myMachineNames.includes(target)
+  #isServerBelongingToMe() {
+    const regex = /^slave-/
+    return this.serverName.match(regex) !== null
   }
 }
 
