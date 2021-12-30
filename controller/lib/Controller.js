@@ -123,6 +123,20 @@ class Controller {
     return Math.round(threads)
   }
 
+  calcPerfectThreadsForAction(action) {
+    switch (action) {
+      case ACTIONS.WEAKEN_SECURITY:
+        const perfectThreads = this.calcPerfectThreadsForWeaken(victimName)
+      case ACTIONS.GROW_MONEY:
+        const perfectThreads = this.calcPerfectThreadsForGrow(victimName)
+      case ACTIONS.STEAL_MONEY:
+        const perfectThreads = this.calcPerfectThreadsForHack(victimName)
+      default:
+        return 0
+    }
+    return perfectThreads
+  }
+
   async launchDistributedAttack() {
     await this.cpFilesToAttackers()
     const maxThreadsPerAttackerNode = await this.calcMaxThreadsPerAttackerNode()
@@ -139,16 +153,9 @@ class Controller {
 
     for (const victimName of this.victimOrder) {
       victimNode = this.allNodes.nodes[victimName]
-
-      switch (victimNode.recommendedAction) {
-        case ACTIONS.WEAKEN_SECURITY:
-          perfectThreads = this.calcPerfectThreadsForWeaken(victimName)
-        case ACTIONS.GROW_MONEY:
-          perfectThreads = this.calcPerfectThreadsForGrow(victimName)
-        case ACTIONS.STEAL_MONEY:
-          perfectThreads = this.calcPerfectThreadsForHack(victimName)
-      }
-
+      let perfectThreads = this.calcPerfectThreadsForAction(
+        victimNode.recommendedAction
+      )
       if (perfectThreads < 1) continue
 
       for (const attackerName of this.attackerOrder) {
