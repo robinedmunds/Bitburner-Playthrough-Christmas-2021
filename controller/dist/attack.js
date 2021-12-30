@@ -27,10 +27,13 @@ const main = async (ns) => {
   switch (attackType) {
     case ACTIONS.WEAKEN_SECURITY:
       await ns.weaken(victim)
+      break
     case ACTIONS.GROW_MONEY:
       await ns.grow(victim)
+      break
     case ACTIONS.STEAL_MONEY:
       await ns.hack(victim)
+      break
   }
 }
 
