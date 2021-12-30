@@ -70,7 +70,7 @@ const makePurchase = (ns, cheapestUpgrade, newNodeCost) => {
 const getUpgradeCost = (obj) => obj.upgrades.cheapest.cost
 
 const main = (ns) => {
-  const moneyToSpend = ns.args[0]
+  let moneyToSpend = ns.args[0]
 
   if (typeof moneyToSpend !== "number") {
     ns.tprint("ERROR:  Requires amount to spend as first argument.")
@@ -88,6 +88,8 @@ const main = (ns) => {
     cheapestUpgrade = findCheapestUpgrade(ns, nodes)
     cheapestUpgradeCost = getUpgradeCost(cheapestUpgrade)
     newNodeCost = ns.hacknet.getPurchaseNodeCost()
+
+    moneyToSpend -= cheapestUpgradeCost
   }
 }
 
