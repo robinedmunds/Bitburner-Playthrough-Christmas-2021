@@ -124,18 +124,16 @@ class Controller {
   }
 
   calcPerfectThreadsForAction(action, victimName) {
-    let perfectThreads = null
     switch (action) {
       case ACTIONS.WEAKEN_SECURITY:
-        perfectThreads = this.calcPerfectThreadsForWeaken(victimName)
+        return this.calcPerfectThreadsForWeaken(victimName)
       case ACTIONS.GROW_MONEY:
-        perfectThreads = this.calcPerfectThreadsForGrow(victimName)
+        return this.calcPerfectThreadsForGrow(victimName)
       case ACTIONS.STEAL_MONEY:
-        perfectThreads = this.calcPerfectThreadsForHack(victimName)
+        return this.calcPerfectThreadsForHack(victimName)
       default:
         return 0
     }
-    return perfectThreads
   }
 
   async launchDistributedAttack() {
