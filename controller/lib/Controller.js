@@ -123,14 +123,15 @@ class Controller {
     return Math.round(threads)
   }
 
-  calcPerfectThreadsForAction(action) {
+  calcPerfectThreadsForAction(action, victimName) {
+    let perfectThreads = null
     switch (action) {
       case ACTIONS.WEAKEN_SECURITY:
-        const perfectThreads = this.calcPerfectThreadsForWeaken(victimName)
+        perfectThreads = this.calcPerfectThreadsForWeaken(victimName)
       case ACTIONS.GROW_MONEY:
-        const perfectThreads = this.calcPerfectThreadsForGrow(victimName)
+        perfectThreads = this.calcPerfectThreadsForGrow(victimName)
       case ACTIONS.STEAL_MONEY:
-        const perfectThreads = this.calcPerfectThreadsForHack(victimName)
+        perfectThreads = this.calcPerfectThreadsForHack(victimName)
       default:
         return 0
     }
@@ -154,7 +155,8 @@ class Controller {
     for (const victimName of this.victimOrder) {
       victimNode = this.allNodes.nodes[victimName]
       perfectThreads = this.calcPerfectThreadsForAction(
-        victimNode.recommendedAction
+        victimNode.recommendedAction,
+        victimName
       )
       if (perfectThreads < 1) continue
 
