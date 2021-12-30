@@ -25,18 +25,15 @@ class Controller {
   }
 
   buildVictimOrder() {
-    const sortMaxMoneyDesc = (a, b) => b[1] - a[1]
-    const sortHackChanceTimesMoneyDesc = (a, b) => {
-      b[1] * (b[2] + b[3]) - a[1] * (a[2] + a[3])
-    }
+    const sortAttackPriorityDesc = (a, b) => b[1] - a[1]
     const victims = this.allNodes.filterIsWorthHacking().nodes
 
     const array = []
     for (const [name, node] of Object.entries(victims)) {
-      array.push([name, node.money, node.hackChance, node.maxMoney])
+      array.push([name, node.attackPriority])
     }
 
-    array.sort(sortHackChanceTimesMoneyDesc)
+    array.sort(sortAttackPriorityDesc)
     return array.flat().filter((i) => typeof i === "string")
   }
 
@@ -111,7 +108,7 @@ class Controller {
 
   calcPerfectThreadsForHack(victim) {
     const singleThreadGrowthPercent = this._ns.hackAnalyze(victim)
-    const threads = Math.floor(100 / singleThreadGrowthPercent)
+    const threads = Math.floor(85 / singleThreadGrowthPercent)
     return threads
   }
 

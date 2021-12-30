@@ -42,6 +42,21 @@ class NodeDetail {
     this.weakenTime = this.#ns.getWeakenTime(target)
     this.hackChance = this.#ns.hackAnalyzeChance(target)
     this.recommendedAction = this.#recommendedAction()
+    this.attackPriority = this.#calcAttackPriority()
+  }
+
+  #calcAttackPriority() {
+    if (!this.isRooted) return 0
+    if (this.maxMoney === 0) return 0
+    if (this.serverName === "home") return 0
+    if (this.isServerBelongingToMe === true) return 0
+
+    return [
+      this.money + 1,
+      this.maxMoney,
+      this.growthMultiplier + 1,
+      this.hackChance + 1
+    ].reduce((prev, curr) => prev * curr)
   }
 
   #calcSecurityStrength() {
