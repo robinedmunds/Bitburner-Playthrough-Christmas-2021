@@ -26,14 +26,17 @@ class Controller {
 
   buildVictimOrder() {
     const sortMaxMoneyDesc = (a, b) => b[1] - a[1]
+    const sortHackChanceTimesMoneyDesc = (a, b) => {
+      b[1] * (b[2] + b[3]) - a[1] * (a[2] + a[3])
+    }
     const victims = this.allNodes.filterIsWorthHacking().nodes
 
     const array = []
     for (const [name, node] of Object.entries(victims)) {
-      array.push([name, node.maxMoney])
+      array.push([name, node.money, node.hackChance, node.maxMoney])
     }
 
-    array.sort(sortMaxMoneyDesc)
+    array.sort(sortHackChanceTimesMoneyDesc)
     return array.flat().filter((i) => typeof i === "string")
   }
 
