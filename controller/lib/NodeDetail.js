@@ -7,7 +7,7 @@ const ACTIONS = {
   DO_NOTHING: "DO_NOTHING"
 }
 
-const TARGET_MONEY_RATIO = 0.1
+const TARGET_MONEY_RATIO = 0.15
 
 class NodeDetail {
   #ns

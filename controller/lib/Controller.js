@@ -118,6 +118,7 @@ class Controller {
     if (node.money === 0) multiplier = 10 ** 5
     if (node.money > 0)
       multiplier = (node.maxMoney * this.growTarget) / node.money
+    if (multiplier < 1) return 0
     const threads = this._ns.growthAnalyze(node.serverName, multiplier)
     return Math.round(threads)
   }
@@ -147,6 +148,8 @@ class Controller {
         case ACTIONS.STEAL_MONEY:
           perfectThreads = this.calcPerfectThreadsForHack(victimName)
       }
+
+      if (perfectThreads < 1) continue
 
       for (const attackerName of this.attackerOrder) {
         attackerNode = this.allNodes.nodes[attackerName]
