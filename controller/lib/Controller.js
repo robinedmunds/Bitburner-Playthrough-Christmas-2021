@@ -114,8 +114,9 @@ class Controller {
   calcPerfectThreadsForGrow(victim) {
     const node = this.allNodes.nodes[victim]
     let multiplier = 1
-    if (node.money === 0) multiplier = 100
-    if (node.money > 0) multiplier = node.maxMoney / node.money
+    if (node.money === 0) multiplier = 10 ** 5
+    if (node.money > 0)
+      multiplier = (node.maxMoney * this.growTarget) / node.money
     const threads = this._ns.growthAnalyze(node.serverName, multiplier)
     return Math.round(threads)
   }
