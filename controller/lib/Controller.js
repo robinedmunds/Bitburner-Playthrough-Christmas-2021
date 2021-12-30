@@ -97,9 +97,10 @@ class Controller {
   calcPerfectThreadsForWeaken(victim) {
     const node = this.allNodes.nodes[victim]
     const gap = node.securityLevel - node.minSecurityLevel
+    const targetSecLevel = gap * (node.hackChance * 1.1)
     let threads = 1
     while (true) {
-      if (this._ns.weakenAnalyze(threads) >= gap) break
+      if (this._ns.weakenAnalyze(threads) >= targetSecLevel) break
       threads++
     }
     return threads
