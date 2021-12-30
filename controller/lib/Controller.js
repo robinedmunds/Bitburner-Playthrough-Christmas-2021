@@ -153,7 +153,7 @@ class Controller {
 
     for (const victimName of this.victimOrder) {
       victimNode = this.allNodes.nodes[victimName]
-      let perfectThreads = this.calcPerfectThreadsForAction(
+      perfectThreads = this.calcPerfectThreadsForAction(
         victimNode.recommendedAction
       )
       if (perfectThreads < 1) continue
