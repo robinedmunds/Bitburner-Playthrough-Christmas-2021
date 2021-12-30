@@ -1,6 +1,13 @@
 /** @param {NS} ns **/
 import { AllNodes } from "/scripts/controller/lib/AllNodes.js"
 
+const ACTIONS = {
+  WEAKEN_SECURITY: "WEAKEN_SECURITY",
+  GROW_MONEY: "GROW_MONEY",
+  STEAL_MONEY: "STEAL_MONEY",
+  DO_NOTHING: "DO_NOTHING"
+}
+
 class Controller {
   constructor(ns) {
     this._ns = ns
@@ -34,7 +41,8 @@ class Controller {
     const sortAvailableRamDesc = (a, b) => b[1] - a[1]
     const myServers = this.allNodes.filterMyServers().nodes
     const botnet = this.allNodes.filterBotnet().nodes
-    const attackers = { ...myServers, ...botnet }
+    const home = this.allNodes.nodes["home"]
+    const attackers = { ...myServers, ...botnet, ...{ home: home } }
 
     const array = []
     for (const [name, node] of Object.entries(attackers)) {
@@ -71,6 +79,7 @@ class Controller {
     let scriptRam = 0
     for (const name of this.attackerOrder) {
       availableRam = this.allNodes.nodes[name].availableRam
+      if (name === "home") availableRam -= 20
       scriptRam = this._ns.getScriptRam(primaryAttackFile, name)
       array.push([name, Math.floor(availableRam / scriptRam)])
     }
@@ -85,39 +94,87 @@ class Controller {
     return totalThreads
   }
 
+  calcPerfectThreadsForWeaken(victim) {
+    const node = this.allNodes.nodes[victim]
+    const gap = node.securityLevel - node.minSecurityLevel
+    let threads = 1
+    while (true) {
+      if (this._ns.weakenAnalyze(threads) >= gap) break
+      threads++
+    }
+    return threads
+  }
+
+  calcPerfectThreadsForHack(victim) {
+    const singleThreadGrowthPercent = this._ns.hackAnalyze(victim)
+    const threads = Math.floor(100 / singleThreadGrowthPercent)
+    return threads
+  }
+
+  calcPerfectThreadsForGrow(victim) {
+    const node = this.allNodes.nodes[victim]
+    let multiplier = 1
+    if (node.money === 0) multiplier = 100
+    if (node.money > 0) multiplier = node.maxMoney / node.money
+    const threads = this._ns.growthAnalyze(node.serverName, multiplier)
+    return Math.round(threads)
+  }
+
   async launchDistributedAttack() {
-    // calc threads that will fit in each attacker node's ram
-    // check effect of that many threads on grow/weaken/hack
-    // pick node to focus attack on
-    // execute appropriate action on all attacker nodes
     await this.cpFilesToAttackers()
     const maxThreadsPerAttackerNode = await this.calcMaxThreadsPerAttackerNode()
     const totalBotnetThreads = this.calcTotalBotnetThreads(
       maxThreadsPerAttackerNode
     )
-    const victimNode = this.allNodes.nodes[this.victimOrder[0]]
     const attackFile = this.attackFiles[0]
     let attackerNode = null
+    let victimNode = null
+    let botnetThreads = totalBotnetThreads
+    let attackMaxThreads = 0
+    let perfectThreads = 0
     let threads = 0
 
-    for (const attackerName of this.attackerOrder) {
-      attackerNode = this.allNodes.nodes[attackerName]
-      threads = maxThreadsPerAttackerNode
-        .filter((i) => i[0] === attackerName)
-        .flat()[1]
+    for (const victimName of this.victimOrder) {
+      victimNode = this.allNodes.nodes[victimName]
 
-      if (threads < 1) continue
-      this._ns.tprint(
-        `INFO:  Launch remote ${victimNode.recommendedAction} attack of ${victimNode.serverName} using ${threads} threads on ${attackerName}`
-      )
+      switch (victimNode.recommendedAction) {
+        case ACTIONS.WEAKEN_SECURITY:
+          perfectThreads = this.calcPerfectThreadsForWeaken(victimName)
+        case ACTIONS.GROW_MONEY:
+          perfectThreads = this.calcPerfectThreadsForGrow(victimName)
+        case ACTIONS.STEAL_MONEY:
+          perfectThreads = this.calcPerfectThreadsForHack(victimName)
+      }
 
-      await this._ns.exec(
-        attackFile,
-        attackerName,
-        threads,
-        victimNode.serverName,
-        victimNode.recommendedAction
-      )
+      for (const attackerName of this.attackerOrder) {
+        attackerNode = this.allNodes.nodes[attackerName]
+        attackMaxThreads = maxThreadsPerAttackerNode
+          .filter((i) => i[0] === attackerName)
+          .flat()[1]
+
+        if (attackMaxThreads < 1) continue
+
+        threads = attackMaxThreads
+        if (attackMaxThreads > perfectThreads)
+          threads = attackMaxThreads - perfectThreads
+
+        this._ns.print(
+          `INFO:  Launch remote ${victimNode.recommendedAction} attack of ${victimNode.serverName} using ${threads} threads on ${attackerName}`
+        )
+
+        await this._ns.exec(
+          attackFile,
+          attackerName,
+          threads,
+          victimNode.serverName,
+          victimNode.recommendedAction
+        )
+
+        perfectThreads -= threads
+        botnetThreads -= threads
+        if (perfectThreads < 1) break
+      }
+      if (botnetThreads < 1) break
     }
   }
 }
