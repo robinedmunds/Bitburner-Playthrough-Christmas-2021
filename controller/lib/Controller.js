@@ -18,6 +18,7 @@ class Controller {
     this.attackerOrder = this.buildAttackerOrder()
     this.growTarget = 0.15
     this.attackFiles = ["/scripts/controller/dist/attack.js"]
+    this.maxThreadsPerAttackerNode = null
   }
 
   getMyMoney() {
@@ -137,7 +138,8 @@ class Controller {
 
   async launchDistributedAttack() {
     await this.cpFilesToAttackers()
-    this._ns.tprint(this.calcMaxThreadsPerAttackerNode())
+    this.maxThreadsPerAttackerNode = this.calcMaxThreadsPerAttackerNode()
+    this._ns.tprint(this.maxThreadsPerAttackerNode)
   }
 }
 
