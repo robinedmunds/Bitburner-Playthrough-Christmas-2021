@@ -138,6 +138,14 @@ class Controller {
     return totalThreads
   }
 
+  killRedundantProcesses() {
+    let victimNode = null
+    for (const process of this.processes) {
+      victimNode = this.allNodes.nodes[process.victimName]
+      if (victimNode.recommendedAction !== process.action) process.kill()
+    }
+  }
+
   attackPrerequisites() {
     this.allNodes = new AllNodes(this._ns)
     this.victimOrder = this.buildVictimOrder()
@@ -203,13 +211,17 @@ class Controller {
         victimNode.recommendedAction
       )
 
+      this._ns.print(
+        `INFO: Executing attack from ${attackerName} -- ${victimNode.serverName}:${victimNode.recommendedAction} with ${threads} threads.`
+      )
+
       if (pid !== 0) {
         // constructor(ns, pid, script, attackerName, victimName, action, threads)
         this.processes.push(
           new Process(
             this._ns,
             pid,
-            primaryAttackFile,
+            attackFile,
             attackerName,
             victimNode.serverName,
             victimNode.recommendedAction,
@@ -223,6 +235,7 @@ class Controller {
 
   async launchDistributedAttack() {
     await this.cpFilesToAttackers()
+    this.killRedundantProcesses()
     this.victimLoop()
   }
 }

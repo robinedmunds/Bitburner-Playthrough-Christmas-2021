@@ -2,9 +2,7 @@
 import { Controller } from "/scripts/controller/lib/Controller.js"
 
 const main = async (ns) => {
-  // await ns.disableLog("ALL")
-  await ns.disableLog("scan")
-  await ns.disableLog("scp")
+  ns.disableLog("ALL")
 
   const controller = new Controller(ns)
   while (true) {

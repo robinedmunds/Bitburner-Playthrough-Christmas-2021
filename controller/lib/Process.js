@@ -1,3 +1,5 @@
+/** @param {NS} ns **/
+
 class Process {
   #ns
 
@@ -20,7 +22,10 @@ class Process {
         this.action
       )
     ) {
-      this.#ns.kill(pid, this.attackerName, this.victimName, this.action)
+      this.#ns.kill(this.pid, this.attackerName, this.victimName, this.action)
+      this.#ns.print(
+        `WARNING: Killed process on ${this.attackerName}: ${this.pid}:${this.script}:${this.victimName}:${this.action}`
+      )
     }
   }
 }
