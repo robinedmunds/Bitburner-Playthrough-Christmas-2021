@@ -81,7 +81,7 @@ class NodeDetail {
     if (this.attackPriority === 0) return ACTIONS.DO_NOTHING
     if (!this.isRooted) return ACTIONS.DO_NOTHING
     if (this.hackChance === 0) return ACTIONS.WEAKEN_SECURITY
-    if (this.weakenTime < this.hackTime * this.hackChance)
+    if (this.weakenTime < this.hackTime * (1 / this.hackChance))
       return ACTIONS.WEAKEN_SECURITY
     if (this.money < this.maxMoney * TARGET_MONEY_RATIO)
       return ACTIONS.GROW_MONEY
