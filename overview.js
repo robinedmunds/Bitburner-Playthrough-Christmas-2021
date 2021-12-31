@@ -49,6 +49,7 @@ const main = (ns) => {
 
   const meanMoneyRatio = getMeanRatio(worthHacking, "moneyRatio")
   const meanSecurityRatio = getMeanRatio(worthHacking, "securityStrength")
+  const meanHackChance = getMeanRatio(worthHacking, "hackChance")
 
   const { totalRam, totalUsedRam, meanRamPerServer, meanRamUtilisation } =
     calcRamStats(myServers)
@@ -83,6 +84,7 @@ const main = (ns) => {
   ns.tprint("")
   ns.tprint("ROOTED AND WORTH HACKING NODE STATS")
   ns.tprint("")
+  ns.tprint(`Mean hack chance:  ${meanHackChance.toFixed(3)}`)
   ns.tprint(`Mean security strength:  ${meanSecurityRatio.toFixed(3)}`)
   ns.tprint(`Mean money ratio:  ${meanMoneyRatio.toFixed(3)}`)
   ns.tprint("")
