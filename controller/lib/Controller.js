@@ -1,5 +1,6 @@
 /** @param {NS} ns **/
 import { AllNodes } from "/scripts/controller/lib/AllNodes.js"
+import { Process } from "/scripts/controller/lib/Process.js"
 
 const ACTIONS = {
   WEAKEN_SECURITY: "WEAKEN_SECURITY",
@@ -20,6 +21,7 @@ class Controller {
     this.attackFiles = ["/scripts/controller/dist/attack.js"]
     this.maxThreadsPerAttackerNode = null
     this.totalBotnetThreads = null
+    this.processes = []
   }
 
   getMyMoney() {
@@ -167,6 +169,7 @@ class Controller {
     let attackerThreadsAvailable = null
     let threadsToRun = perfectThreads
     let threads = undefined
+    let pid = 0
 
     for (const attackerName of this.attackerOrder) {
       attackerThreadsAvailable = this.maxThreadsPerAttackerNode.filter(
@@ -191,7 +194,8 @@ class Controller {
       )
         continue
 
-      this._ns.exec(
+      pid = 0
+      pid = this._ns.exec(
         attackFile,
         attackerName,
         threads,
@@ -199,6 +203,20 @@ class Controller {
         victimNode.recommendedAction
       )
 
+      if (pid !== 0) {
+        // constructor(ns, pid, script, attackerName, victimName, action, threads)
+        this.processes.push(
+          new Process(
+            this._ns,
+            pid,
+            primaryAttackFile,
+            attackerName,
+            victimNode.serverName,
+            victimNode.recommendedAction,
+            threads
+          )
+        )
+      }
       threadsToRun -= threads
     }
   }
