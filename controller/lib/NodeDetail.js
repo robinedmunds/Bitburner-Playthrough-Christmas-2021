@@ -51,11 +51,18 @@ class NodeDetail {
     if (this.serverName === "home") return 0
     if (this.isServerBelongingToMe === true) return 0
 
+    const oneDayMs = 1000 * 60 * 60 * 24
+    const meanActionTime = Math.round(
+      (this.hackTime + this.growTime + this.weakenTime) / 3
+    )
+    const actionTimeWeight = oneDayMs - meanActionTime
+
     return [
       this.money + 1,
       this.maxMoney,
       this.growthMultiplier + 1,
-      this.hackChance + 1
+      this.hackChance + 1,
+      actionTimeWeight
     ].reduce((prev, curr) => prev * curr)
   }
 
