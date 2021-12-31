@@ -48,7 +48,7 @@ const main = (ns) => {
   const stealableInBillions = stealableMoney / 10 ** 9
 
   const meanMoneyRatio = getMeanRatio(worthHacking, "moneyRatio")
-  const meanSecurityRatio = getMeanRatio(worthHacking, "securityRatio")
+  const meanSecurityRatio = getMeanRatio(worthHacking, "securityStrength")
 
   const { totalRam, totalUsedRam, meanRamPerServer, meanRamUtilisation } =
     calcRamStats(myServers)
@@ -83,7 +83,7 @@ const main = (ns) => {
   ns.tprint("")
   ns.tprint("ROOTED AND WORTH HACKING NODE STATS")
   ns.tprint("")
-  ns.tprint(`Mean security ratio:  ${meanSecurityRatio.toFixed(3)}`)
+  ns.tprint(`Mean security strength:  ${meanSecurityRatio.toFixed(3)}`)
   ns.tprint(`Mean money ratio:  ${meanMoneyRatio.toFixed(3)}`)
   ns.tprint("")
   ns.tprint(
