@@ -137,12 +137,14 @@ class Controller {
 
   attackerLoop() {}
 
-  async launchDistributedAttack() {
+  async attackPrerequisites() {
     await this.cpFilesToAttackers()
     this.maxThreadsPerAttackerNode = this.calcMaxThreadsPerAttackerNode()
-    this._ns.tprint(this.maxThreadsPerAttackerNode)
     this.attackerThreadsAvailable = this.calcTotalBotnetThreads()
-    this._ns.tprint(this.attackerThreadsAvailable)
+  }
+
+  async launchDistributedAttack() {
+    await this.attackPrerequisites()
   }
 }
 
