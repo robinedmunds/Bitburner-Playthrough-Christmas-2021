@@ -18,6 +18,15 @@ class Controller {
     this.attackerOrder = this.buildAttackerOrder()
     this.growTarget = 0.15
     this.attackFiles = ["/scripts/controller/dist/attack.js"]
+    this.maxThreadsPerAttackerNode = null
+    this.botnetThreads = null
+
+    this.init()
+  }
+
+  async init() {
+    this.maxThreadsPerAttackerNode = await this.calcMaxThreadsPerAttackerNode()
+    this.botnetThreads = this.calcTotalBotnetThreads()
   }
 
   getMyMoney() {
@@ -63,37 +72,6 @@ class Controller {
     }
   }
 
-  // calcBotnetRamAvailable() {
-  //   let botnetAvailableRam = 0
-  //   for (const name of this.attackerOrder) {
-  //     const node = this.allNodes.nodes[name]
-  //     botnetAvailableRam += node.availableRam
-  //   }
-  //   return botnetAvailableRam
-  // }
-
-  async calcMaxThreadsPerAttackerNode() {
-    const array = []
-    const primaryAttackFile = this.attackFiles[0]
-    let availableRam = 0
-    let scriptRam = 0
-    for (const name of this.attackerOrder) {
-      availableRam = this.allNodes.nodes[name].availableRam
-      if (name === "home") availableRam -= 20
-      scriptRam = this._ns.getScriptRam(primaryAttackFile, name)
-      array.push([name, Math.floor(availableRam / scriptRam)])
-    }
-    return array
-  }
-
-  calcTotalBotnetThreads(maxThreadsPerAttackerNode) {
-    let totalThreads = 0
-    for (const nameThreadsArr of maxThreadsPerAttackerNode) {
-      totalThreads += nameThreadsArr[1]
-    }
-    return totalThreads
-  }
-
   calcPerfectThreadsForWeaken(victim) {
     const node = this.allNodes.nodes[victim]
     const gap = node.securityLevel - node.minSecurityLevel
@@ -136,19 +114,72 @@ class Controller {
     }
   }
 
-  async launchDistributedAttack() {
-    await this.cpFilesToAttackers()
-    const maxThreadsPerAttackerNode = await this.calcMaxThreadsPerAttackerNode()
-    const totalBotnetThreads = this.calcTotalBotnetThreads(
-      maxThreadsPerAttackerNode
-    )
+  async calcMaxThreadsPerAttackerNode() {
+    const array = []
+    const primaryAttackFile = this.attackFiles[0]
+    let availableRam = 0
+    let scriptRam = 0
+    for (const name of this.attackerOrder) {
+      availableRam = this.allNodes.nodes[name].availableRam
+      if (name === "home") availableRam -= 20
+      scriptRam = await this._ns.getScriptRam(primaryAttackFile, name)
+      array.push([name, Math.floor(availableRam / scriptRam)])
+    }
+    return array
+  }
+
+  calcTotalBotnetThreads() {
+    let totalThreads = 0
+    for (const nameThreadsArr of this.maxThreadsPerAttackerNode) {
+      totalThreads += nameThreadsArr[1]
+    }
+    return totalThreads
+  }
+
+  async attackerLoop({ victimName, perfectThreads }) {
+    const victimNode = this.allNodes.nodes[victimName]
     const attackFile = this.attackFiles[0]
     let attackerNode = null
+    let attackerMaxThreads = undefined
+    let threads = undefined
+    let threadsExecuted = 0
+
+    for (const attackerName of this.attackerOrder) {
+      attackerNode = this.allNodes.nodes[attackerName]
+      attackerMaxThreads = this.maxThreadsPerAttackerNode
+        .filter((i) => i[0] === attackerName)
+        .flat()[1]
+
+      threads = attackerMaxThreads
+      if (attackerMaxThreads > perfectThreads) threads = perfectThreads
+      if (threads < 1) continue
+
+      this._ns.print(
+        `INFO:  Launch remote ${victimNode.recommendedAction} attack of ${victimNode.serverName} using ${threads} threads on ${attackerName}`
+      )
+
+      await this._ns.exec(
+        attackFile,
+        attackerName,
+        threads,
+        victimNode.serverName,
+        victimNode.recommendedAction
+      )
+
+      threadsExecuted -= threads
+      perfectThreads -= threads
+      if (perfectThreads < 1) break
+    }
+
+    return { threadsExecuted }
+  }
+
+  async launchDistributedAttack() {
     let victimNode = null
-    let botnetThreads = totalBotnetThreads
-    let attackMaxThreads = 0
     let perfectThreads = 0
-    let threads = 0
+    let threadsExecuted = 0
+
+    await this.cpFilesToAttackers()
 
     for (const victimName of this.victimOrder) {
       victimNode = this.allNodes.nodes[victimName]
@@ -156,37 +187,14 @@ class Controller {
         victimNode.recommendedAction,
         victimName
       )
-      if (perfectThreads < 1) continue
 
-      for (const attackerName of this.attackerOrder) {
-        attackerNode = this.allNodes.nodes[attackerName]
-        attackMaxThreads = maxThreadsPerAttackerNode
-          .filter((i) => i[0] === attackerName)
-          .flat()[1]
+      threadsExecuted = await this.attackerLoop({
+        victimName,
+        perfectThreads
+      }).threadsExecuted
 
-        if (attackMaxThreads < 1) continue
-
-        threads = attackMaxThreads
-        if (attackMaxThreads > perfectThreads)
-          threads = attackMaxThreads - perfectThreads
-
-        this._ns.print(
-          `INFO:  Launch remote ${victimNode.recommendedAction} attack of ${victimNode.serverName} using ${threads} threads on ${attackerName}`
-        )
-
-        await this._ns.exec(
-          attackFile,
-          attackerName,
-          threads,
-          victimNode.serverName,
-          victimNode.recommendedAction
-        )
-
-        perfectThreads -= threads
-        botnetThreads -= threads
-        if (perfectThreads < 1) break
-      }
-      if (botnetThreads < 1) break
+      this.botnetThreads -= threadsExecuted
+      if (this.botnetThreads < 1) break
     }
   }
 }
