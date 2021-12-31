@@ -117,7 +117,9 @@ class Controller {
       if (name === "home") availableRam -= 20
       scriptRam = this._ns.getScriptRam(primaryAttackFile, name)
       maxThreads = Math.floor(availableRam / scriptRam)
-      if (typeof maxThreads !== "number") maxThreads = 0
+      if (typeof scriptRam !== "number") {
+        throw "calcMaxThreadsPerAttackerNode: getScriptRam returning null because file is not on target."
+      }
       array.push([name, maxThreads])
     }
     return array
