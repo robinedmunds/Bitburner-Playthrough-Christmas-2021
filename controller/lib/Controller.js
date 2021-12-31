@@ -138,6 +138,8 @@ class Controller {
 
   attackPrerequisites() {
     this.allNodes = new AllNodes(this._ns)
+    this.victimOrder = this.buildVictimOrder()
+    this.attackerOrder = this.buildAttackerOrder()
     this.maxThreadsPerAttackerNode = this.calcMaxThreadsPerAttackerNode()
     this.totalBotnetThreads = this.calcTotalBotnetThreads()
   }
