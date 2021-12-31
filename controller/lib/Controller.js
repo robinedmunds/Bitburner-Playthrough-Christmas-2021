@@ -19,6 +19,7 @@ class Controller {
     this.growTarget = 0.15
     this.attackFiles = ["/scripts/controller/dist/attack.js"]
     this.maxThreadsPerAttackerNode = null
+    this.attackerThreadsAvailable = null
   }
 
   getMyMoney() {
@@ -140,6 +141,8 @@ class Controller {
     await this.cpFilesToAttackers()
     this.maxThreadsPerAttackerNode = this.calcMaxThreadsPerAttackerNode()
     this._ns.tprint(this.maxThreadsPerAttackerNode)
+    this.attackerThreadsAvailable = this.calcTotalBotnetThreads()
+    this._ns.tprint(this.attackerThreadsAvailable)
   }
 }
 
