@@ -154,12 +154,14 @@ class Controller {
     this.totalBotnetThreads = this.calcTotalBotnetThreads()
   }
 
-  victimLoop() {
+  async victimLoop() {
     let victimNode = null
     let perfectThreads = null
 
     for (const victimName of this.victimOrder) {
       this.attackPrerequisites()
+
+      await this._ns.sleep(100)
 
       if (this.totalBotnetThreads < 1) break
       victimNode = this.allNodes.nodes[victimName]
@@ -236,7 +238,7 @@ class Controller {
   async launchDistributedAttack() {
     await this.cpFilesToAttackers()
     this.killRedundantProcesses()
-    this.victimLoop()
+    await this.victimLoop()
   }
 }
 

@@ -7,7 +7,7 @@ const main = async (ns) => {
   const controller = new Controller(ns)
   while (true) {
     await controller.launchDistributedAttack()
-    await ns.sleep(1000 * 6)
+    await ns.sleep(1000 * 10)
   }
 }
 
