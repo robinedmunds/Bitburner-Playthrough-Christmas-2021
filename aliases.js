@@ -3,7 +3,7 @@ const aliases = {
   detail: "/scripts/utils/detail.js",
   overview: "/scripts/utils/overview.js",
   route: "/scripts/utils/route.js",
-  scan: "/scripts/utils/scan.js",
+  nodes: "/scripts/utils/nodes.js",
   buyserver: "/scripts/buy/server.js",
   buyhacknet: "/scripts/buy/hacknet.js",
   cascade: "/scripts/hacking/cascade.js",
