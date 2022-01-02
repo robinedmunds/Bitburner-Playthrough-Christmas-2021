@@ -1,13 +1,5 @@
 /** @param {NS} ns **/
-
-const ACTIONS = {
-  WEAKEN_SECURITY: "WEAKEN_SECURITY",
-  GROW_MONEY: "GROW_MONEY",
-  STEAL_MONEY: "STEAL_MONEY",
-  DO_NOTHING: "DO_NOTHING"
-}
-
-const TARGET_MONEY_RATIO = 0.04
+import { ACTIONS, MINIMUM_CASH } from "/scripts/controller/lib/constants.js"
 
 class NodeDetail {
   #ns
@@ -83,8 +75,7 @@ class NodeDetail {
     if (this.hackChance === 0) return ACTIONS.WEAKEN_SECURITY
     if (this.weakenTime < this.hackTime * (1 / this.hackChance))
       return ACTIONS.WEAKEN_SECURITY
-    if (this.money < this.maxMoney * TARGET_MONEY_RATIO)
-      return ACTIONS.GROW_MONEY
+    if (this.money < this.maxMoney * MINIMUM_CASH) return ACTIONS.GROW_MONEY
     return ACTIONS.STEAL_MONEY
   }
 

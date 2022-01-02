@@ -1,13 +1,7 @@
 /** @param {NS} ns **/
 import { AllNodes } from "/scripts/controller/lib/AllNodes.js"
 import { Process } from "/scripts/controller/lib/Process.js"
-
-const ACTIONS = {
-  WEAKEN_SECURITY: "WEAKEN_SECURITY",
-  GROW_MONEY: "GROW_MONEY",
-  STEAL_MONEY: "STEAL_MONEY",
-  DO_NOTHING: "DO_NOTHING"
-}
+import { ACTIONS, GROW_TARGET } from "/scripts/controller/lib/constants.js"
 
 class Controller {
   constructor(ns) {
@@ -17,7 +11,7 @@ class Controller {
     this.myMoney = this.getMyMoney()
     this.victimOrder = this.buildVictimOrder()
     this.attackerOrder = this.buildAttackerOrder()
-    this.growTarget = 0.15
+    this.growTarget = GROW_TARGET
     this.attackFiles = ["/scripts/controller/dist/attack.js"]
     this.maxThreadsPerAttackerNode = null
     this.totalBotnetThreads = null
