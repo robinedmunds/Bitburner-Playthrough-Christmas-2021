@@ -8,4 +8,4 @@ const ACTIONS = {
 const GROW_TARGET = 0.9
 const MINIMUM_CASH = 0.1
 
-export { ACTIONS }
+export { ACTIONS, GROW_TARGET, MINIMUM_CASH }
