@@ -11,9 +11,9 @@ class GangMember {
   }
 
   setMemberTask(taskId) {
-    const taskIds = this._ns.gang.getTaskNames()
+    const taskIds = this.#parent._ns.gang.getTaskNames()
     if (!taskIds.includes(taskId)) throw `ERROR: ${taskId} is not a valid task.`
-    this.#parent._ns.gang.setMemberTask(taskId)
+    this.#parent._ns.gang.setMemberTask(this.name, taskId)
   }
 
   ascend() {

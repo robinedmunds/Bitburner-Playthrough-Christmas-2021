@@ -34,9 +34,11 @@ const main = (ns) => {
   }
 
   const gang = new Gang(ns)
+  const mostRespectGainingTaskId = gang.respectGainTaskOrder[0]
 
-  ns.tprint(JSON.stringify(gang, null, 2))
-  ns.tprint(gang.respectGainTaskOrder[0])
+  for (const [name, member] of Object.entries(gang.members)) {
+    member.setMemberTask(mostRespectGainingTaskId)
+  }
 }
 
 export { main }
