@@ -99,7 +99,7 @@ class Controller {
       case ACTIONS.STEAL_MONEY:
         return this.calcPerfectThreadsForHack(victimName)
       default:
-        return 0
+        throw "Invalid ACTION argument passed to Controller:calcPerfectThreadsForAction."
     }
   }
 
@@ -136,7 +136,10 @@ class Controller {
     let victimNode = null
     for (const process of this.processes) {
       victimNode = this.allNodes.nodes[process.victimName]
-      if (victimNode.recommendedAction !== process.action) process.kill()
+      if (victimNode.recommendedAction !== process.action) {
+        process.kill()
+        this.processes.splice(this.processes.indexOf(process), 1)
+      }
     }
   }
 
