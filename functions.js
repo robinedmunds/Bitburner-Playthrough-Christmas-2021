@@ -206,3 +206,12 @@ const hacknet = [
   "upgradeLevel",
   "upgradeRam"
 ]
+
+const gang = [
+  "ascensionMultiplier",
+  "ascensionPointsGain",
+  "moneyGain",
+  "respectGain",
+  "wantedLevelGain",
+  "wantedPenalty"
+]
