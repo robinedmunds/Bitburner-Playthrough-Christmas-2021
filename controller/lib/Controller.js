@@ -112,7 +112,7 @@ class Controller {
     let maxThreads = 0
     for (const name of this.attackerOrder) {
       availableRam = this.allNodes.nodes[name].availableRam
-      if (name === "home") availableRam -= 20
+      if (name === "home") availableRam -= 30
       scriptRam = this._ns.getScriptRam(primaryAttackFile, name)
       maxThreads = Math.floor((availableRam * 0.98) / scriptRam)
       if (maxThreads < 1) maxThreads = 0
