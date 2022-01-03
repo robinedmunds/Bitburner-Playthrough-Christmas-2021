@@ -36,6 +36,7 @@ const main = (ns) => {
   const gang = new Gang(ns)
 
   ns.tprint(JSON.stringify(gang, null, 2))
+  ns.tprint(gang.respectGainTaskOrder[0])
 }
 
 export { main }

@@ -11,6 +11,17 @@ class Gang {
     this.equipmentCatalogue = this.buildEquipmentCatalogue()
     this.potentialTasks = this.buildPotentialTasks()
     this.otherGangs = this._ns.gang.getOtherGangInformation()
+    this.respectGainTaskOrder = this.sortTaskRespectGainDesc()
+  }
+
+  sortTaskRespectGainDesc() {
+    const sortBaseRespectDesc = (a, b) => b[1] - a[1]
+    const arr = []
+    for (const [taskId, task] of Object.entries(this.potentialTasks)) {
+      arr.push([taskId, task.stats.baseRespect])
+    }
+    arr.sort(sortBaseRespectDesc)
+    return arr.flat().filter((i) => typeof i === "string")
   }
 
   buildMembers() {
