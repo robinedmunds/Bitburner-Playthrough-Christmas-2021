@@ -208,10 +208,25 @@ const hacknet = [
 ]
 
 const gang = [
-  "ascensionMultiplier",
-  "ascensionPointsGain",
-  "moneyGain",
-  "respectGain",
-  "wantedLevelGain",
-  "wantedPenalty"
+  "ascendMember",
+  "canRecruitMember",
+  "createGang",
+  "getAscensionResult",
+  "getBonusTime",
+  "getChanceToWinClash",
+  "getEquipmentCost",
+  "getEquipmentNames",
+  "getEquipmentStats",
+  "getEquipmentType",
+  "getGangInformation",
+  "getMemberInformation",
+  "getMemberNames",
+  "getOtherGangInformation",
+  "getTaskNames",
+  "getTaskStats",
+  "inGang",
+  "purchaseEquipment",
+  "recruitMember",
+  "setMemberTask",
+  "setTerritoryWarfare"
 ]
