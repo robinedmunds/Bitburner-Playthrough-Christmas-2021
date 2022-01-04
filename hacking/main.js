@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-import { Controller } from "/scripts/controller/lib/Controller.js"
+import { Controller } from "/scripts/hacking/lib/Controller.js"
 
 const main = async (ns) => {
   ns.disableLog("ALL")

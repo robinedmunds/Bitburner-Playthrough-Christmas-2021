@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-import { ACTIONS, MINIMUM_CASH } from "/scripts/controller/lib/constants.js"
+import { ACTIONS, MINIMUM_CASH } from "/scripts/hacking/lib/constants.js"
 
 class NodeDetail {
   #ns

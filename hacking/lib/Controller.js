@@ -1,7 +1,7 @@
 /** @param {NS} ns **/
-import { AllNodes } from "/scripts/controller/lib/AllNodes.js"
-import { Process } from "/scripts/controller/lib/Process.js"
-import { ACTIONS, GROW_TARGET } from "/scripts/controller/lib/constants.js"
+import { AllNodes } from "/scripts/hacking/lib/AllNodes.js"
+import { Process } from "/scripts/hacking/lib/Process.js"
+import { ACTIONS, GROW_TARGET } from "/scripts/hacking/lib/constants.js"
 
 class Controller {
   constructor(ns) {
@@ -12,7 +12,7 @@ class Controller {
     this.victimOrder = this.buildVictimOrder()
     this.attackerOrder = this.buildAttackerOrder()
     this.growTarget = GROW_TARGET
-    this.attackFiles = ["/scripts/controller/dist/attack.js"]
+    this.attackFiles = ["/scripts/hacking/dist/attack.js"]
     this.maxThreadsPerAttackerNode = null
     this.totalBotnetThreads = null
     this.processes = []

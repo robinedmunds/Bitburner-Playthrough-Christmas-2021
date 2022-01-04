@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-import { NodeDetail } from "/scripts/controller/lib/NodeDetail.js"
+import { NodeDetail } from "/scripts/hacking/lib/NodeDetail.js"
 
 class AllNodes {
   #ns
