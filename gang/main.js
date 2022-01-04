@@ -26,9 +26,9 @@ const main = (ns) => {
   }
 
   const gang = new Gang(ns)
-  const mostRespectGainingTaskId = gang.respectGainTaskOrder[1]
 
   for (const [name, member] of Object.entries(gang.members)) {
+    member.ascend()
     member.setTask("Deal Drugs")
   }
 
