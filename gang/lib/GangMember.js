@@ -17,10 +17,17 @@ class GangMember {
   }
 
   ascend() {
-    // this.#parent._ns.gang.ascendMember(this.name)
-    this.#parent._ns.print(
-      `ERROR: ascend not implented. Write checks to see if ascending is beneficial.`
-    )
+    const meanAscensionReward =
+      [
+        this.ascensionReward.hack,
+        this.ascensionReward.str,
+        this.ascensionReward.def,
+        this.ascensionReward.dex,
+        this.ascensionReward.agi,
+        this.ascensionReward.cha
+      ].reduce((runningTotal, curr) => runningTotal + curr) / 6
+
+    if (meanAscensionReward >= 3) this.#parent._ns.gang.ascendMember(this.name)
   }
 
   purchaseItem(itemId) {
