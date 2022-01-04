@@ -1,7 +1,11 @@
 /** @param {NS} ns **/
 import { AllNodes } from "/scripts/hacking/lib/AllNodes.js"
 import { Process } from "/scripts/hacking/lib/Process.js"
-import { ACTIONS, GROW_TARGET } from "/scripts/hacking/lib/constants.js"
+import {
+  ACTIONS,
+  GROW_TARGET,
+  HOME_RESERVED_RAM
+} from "/scripts/hacking/lib/constants.js"
 
 class Controller {
   constructor(ns) {
@@ -112,7 +116,7 @@ class Controller {
     let maxThreads = 0
     for (const name of this.attackerOrder) {
       availableRam = this.allNodes.nodes[name].availableRam
-      if (name === "home") availableRam -= 30
+      if (name === "home") availableRam -= HOME_RESERVED_RAM
       scriptRam = this._ns.getScriptRam(primaryAttackFile, name)
       maxThreads = Math.floor((availableRam * 0.98) / scriptRam)
       if (maxThreads < 1) maxThreads = 0
