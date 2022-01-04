@@ -1,30 +1,22 @@
 /** @param {NS} ns **/
 import { Gang } from "/scripts/gang/lib/Gang.js"
 
-const gang = [
-  "ascendMember",
-  "canRecruitMember",
-  "createGang",
-  "getAscensionResult",
-  "getBonusTime",
-  "getChanceToWinClash",
-
-  "getEquipmentCost",
-  "getEquipmentNames",
-  "getEquipmentStats",
-  "getEquipmentType",
-
-  "getGangInformation",
-  "getMemberInformation",
-  "getMemberNames",
-  "getOtherGangInformation",
-  "getTaskNames",
-  "getTaskStats",
-  "inGang",
-  "purchaseEquipment",
-  "recruitMember",
-  "setMemberTask",
-  "setTerritoryWarfare"
+const crimes = [
+  "Human Trafficking",
+  "Traffick Illegal Arms",
+  "Armed Robbery",
+  "Threaten & Blackmail",
+  "Run a Con",
+  "Deal Drugs",
+  "Strongarm Civilians",
+  "Mug People",
+  "Unassigned",
+  "Terrorism",
+  "Vigilante Justice",
+  "Train Combat",
+  "Train Hacking",
+  "Train Charisma",
+  "Territory Warfare"
 ]
 
 const main = (ns) => {
@@ -34,11 +26,17 @@ const main = (ns) => {
   }
 
   const gang = new Gang(ns)
-  const mostRespectGainingTaskId = gang.respectGainTaskOrder[0]
+  const mostRespectGainingTaskId = gang.respectGainTaskOrder[1]
 
   for (const [name, member] of Object.entries(gang.members)) {
-    member.setMemberTask(mostRespectGainingTaskId)
+    member.setTask("Deal Drugs")
   }
+
+  ns.tprint(gang.moneyGainTaskOrder)
+  ns.tprint(JSON.stringify(gang.info, null, 2))
+  ns.tprint(JSON.stringify(gang.members["a"], null, 2))
+  ns.tprint(JSON.stringify(gang.potentialTasks["Human Trafficking"], null, 2))
+  ns.tprint(JSON.stringify(gang.otherGangs, null, 2))
 }
 
 export { main }

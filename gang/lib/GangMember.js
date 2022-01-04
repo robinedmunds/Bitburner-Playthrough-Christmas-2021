@@ -10,7 +10,7 @@ class GangMember {
     this.ascensionReward = this.#parent._ns.gang.getAscensionResult(this.name)
   }
 
-  setMemberTask(taskId) {
+  setTask(taskId) {
     const taskIds = this.#parent._ns.gang.getTaskNames()
     if (!taskIds.includes(taskId)) throw `ERROR: ${taskId} is not a valid task.`
     this.#parent._ns.gang.setMemberTask(this.name, taskId)
@@ -21,6 +21,10 @@ class GangMember {
     this.#parent._ns.print(
       `ERROR: ascend not implented. Write checks to see if ascending is beneficial.`
     )
+  }
+
+  purchaseItem(itemId) {
+    this.#parent._ns.gang.purchaseEquipment(this.name, itemId)
   }
 }
 
